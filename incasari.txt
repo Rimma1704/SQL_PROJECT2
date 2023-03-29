@@ -1,0 +1,34 @@
+Select date(data_consultatie), sum(cost_achitat) 
+                  as Incasari_zilnice from consultatii
+Group by date(data_consultatie);
+
+------------------------------------------------------
+Select date_format(data_consultatie, '%b'), sum(cost_achitat)
+                  as Incasari_lunare from consultatii 
+Group by date_format(data_consultatie, '%b');
+
+
+Incasari_zilnice
+------------------------------------------
+  data consultatie         suma totala 
+| 2020-05-01       |               1795 |
+| 2020-05-02       |               2375 |
+| 2020-05-03       |               1135 |
+| 2020-05-04       |               2760 |
+
+ -------------------------------------------
+
+Incasari_lunare 
+--------------------------------------------
+
+luna(data_consultatie)     suma totala
+|        Jan       |              12795 |
+|        Feb       |              22375 |
+|        Mar       |              31135 |
+|        Apr       |              42760 |
+
+
+
+Cost total = interventii * (tarif + cost materiale)
+where data_consultatie = current_date
+

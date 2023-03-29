@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+
+namespace Project1
+{
+    public partial class Form1 : Form
+    {
+        MySqlConnection con;
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        string firstname;
+        string lastname;
+        int age;
+        string address;
+        string address1;
+
+        void validate()
+        {
+            ConStrings str =new ConStrings();
+            str.fname = firstname;
+            str.lname = lastname;
+            str.age = age;
+            str.address = address;
+            str.address1 = address1;
+
+            firstname = textBox1.Text;
+            lastname= textBox2.Text;
+            age = Convert.ToInt32(textBox3.Text.ToString());
+            address = textBox4.Text;
+            address1 = textBox4.Text;
+
+
+            if(string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrEmpty(textBox2.Text) || string.IsNullOrEmpty(textBox3.Text) || string.IsNullOrEmpty(textBox4.Text))
+            {
+                message_validate("empty", "Empty notification");
+            }
+            else
+            {
+                insert(str.fname, str.lname, str.age, str.address, str.address1);
+            }
+
+
+
+
+
+        }
+        void message_validate(string message , string title)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+
+        private  async void insert(string fname, string lname, int age, string address, String address1)
+        {
+
+            //delay
+            await Task.Delay(5000);
+            using(con = Connection.connection)
+            {
+                string q = "stored_data";
+                MySqlCommand c = new MySqlCommand(q, con);
+                c.Connection = con;
+                c.CommandType = CommandType.StoredProcedure;
+                c.Parameters.AddWithValue("p_id", dafault);
+                c.Parameters.AddWithValue("p_fname", fname);
+                c.Parameters.AddWithValue("p_lname", lname);
+                c.Parameters.AddWithValue("p_age", age);
+                c.Parameters.AddWithValue("p_address", address + address1);
+
+                int j =c.ExecuteNonQuery();
+                if(j > 0) {
+                    message_success("succesfully Inserted", "Insert notification");
+                        }
+            }
+
+        }
+        void message_success(string message, string title)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
